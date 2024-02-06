@@ -4,10 +4,11 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Log-in|Study-with-You</title>
+        <title>Log-in|GAKUSAPO</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="bg-gray-100">
+    	<jsp:include page="../../header.jsp"/>
 		<div class="container mx-auto mt-5">
 			<div class="flex justify-center">
 				<div class="w-full max-w-lg">

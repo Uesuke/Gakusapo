@@ -11,12 +11,13 @@ List<Material> materialList = (List<Material>)session.getAttribute("materialList
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Library_Material|Study-with-You</title>
+	<title>Library_Material|GAKUSAPO</title>
 	<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-	 <div class="container mx-auto mt-5">
-        <ul class="flex justify-center">
+	<jsp:include page="../../header.jsp"/>
+	<div class="container mx-auto mt-5">
+		<ul class="flex justify-center">
 			<% for(Material material : materialList){ %>
 				<li>
 					<h2><%= material.getMaterialName() %></h2>
@@ -26,7 +27,7 @@ List<Material> materialList = (List<Material>)session.getAttribute("materialList
 					<p>総セクション数：<%= material.getTotalSections() %></p>
 				</li>
 			<% } %>
-        </ul>
-    </div>
+		</ul>
+	</div>
 </body>
 </html>

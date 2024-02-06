@@ -12,9 +12,9 @@ public class SetGoalLogicTest {
 	public static void main(String[] args) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date dateStart = sdf.parse("2024-01-24");
-			Date dateEnd = sdf.parse("2024-02-11");
-			Goal settingGoal = new Goal(0, "ロジックテスト合格", 6, dateStart, dateEnd,1, 1);
+			Date dateStart = sdf.parse("2024-02-06");
+			Date dateEnd = sdf.parse("2024-02-14");
+			Goal settingGoal = new Goal(0, "ゴールテスト合格", 6, dateStart, dateEnd,1, 1);
 			SetGoalLogic sgl = new SetGoalLogic();
 			Goal goal = sgl.execute(settingGoal);
 			
