@@ -19,17 +19,18 @@ Map<GoalDetail, Material> map = (Map<GoalDetail, Material>)request.getAttribute(
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Goal_Setting|Study-with-You</title>
+		<title>Goal_Setting|GAKUSAPO</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<script deffer src="./js/goal_set.js"></script>
 	</head>
 	<body class="bg-gray-100">
+		<jsp:include page="../../header.jsp"/>
 		<div class="container mx-auto mt-5">
 			<div class="flex justify-center">
 				<div class="w-full max-w-5xl">
 					<div class="bg-white p-8 rounded shadow-lg">
 						<div id="content" class="w-4/5 m-auto">
-							<h1 id="goalName" class="text-2xl text-center mb-4"><%=goal.getGoalName(); %></h1>
+							<h1 id="goalName" class="text-2xl text-center mb-4"><%=goal.getGoalName() %></h1>
 							<div class="flex justify-center">
 								<div class="w-1/3 text-center bg-blue-100 rounded p-4 mr-1">
 									<p>取り組み期間</p>

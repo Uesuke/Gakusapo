@@ -11,14 +11,16 @@ List<Material> materialList = (List<Material>)session.getAttribute("materialList
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Goal_Setting|Study-with-You</title>
+	<title>Goal_Setting|GAKUSAPO</title>
 	<script src="https://cdn.tailwindcss.com"></script>
 	<script deffer src="./js/goal_set.js"></script>
+	<script deffer src="./js/date.js"></script>
 </head>
 <body class="bg-gray-100">
-	 <div class="container mx-auto mt-5">
-        <div class="flex justify-center">
-            <div class="w-full max-w-lg">
+	<jsp:include page="../../header.jsp"/>
+	<div class="container mx-auto mt-5">
+		<div class="flex justify-center">
+			<div class="w-full max-w-lg">
 				<h1 class="text-3xl text-center mb-8">目標登録画面</h1>
 				<div class="bg-white p-8 rounded shadow-lg">
 					<form action="SetGoalServlet" method="post">
@@ -28,12 +30,14 @@ List<Material> materialList = (List<Material>)session.getAttribute("materialList
 						</div>
 						<div class="mb-6">
 							<p>
-								<label for="dateStart" class="block mb-2">開始日</label>
-								<input type="date" id="dateStart" class="form-input border-2 border-gray-500" name="startFrom">
+								<label for="dateStartInput" class="block mb-2">開始日</label>
+								<input type="date" id="dateStartInput" class="form-input border-2 border-gray-500" name="startFromInput" onchange="extractDate(this)">
+								<input type="hidden" id="dateStart" name="dateStart">
 							</p>
 							<p>
-								<label for="dateEnd" class="block mb-2">終了日</label>
-								<input type="date" id="dateEnd" class="form-input border-2 border-gray-500" name="endTo">
+								<label for="dateEndInput" class="block mb-2">終了日</label>
+								<input type="date" id="dateEndInput" class="form-input border-2 border-gray-500" name="endToInput" onchange="extractDate(this)">
+								<input type="hidden" id="dateEnd" name="dateEnd">
 							</p>
 						</div>
 						<div class="mb-6">
