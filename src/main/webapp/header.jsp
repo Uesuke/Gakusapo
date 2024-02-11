@@ -19,6 +19,7 @@ User user = (User)session.getAttribute("user");
 					<a href="IndexServlet"><img src="./images/logo_gakusapo_header.png" class="w-36"></a>
 				</div>
 				<div class="">
+					<% if(user != null) { %>
 					<ul class="flex pt-4">
 						<li>
 							<a href="RegisterMaterialServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
@@ -41,6 +42,7 @@ User user = (User)session.getAttribute("user");
 							</a>
 						</li>
 					</ul>
+					<% } %>
 				</div>
 			</div>
 	    </nav>
