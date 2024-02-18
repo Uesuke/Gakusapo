@@ -19,6 +19,7 @@ User user = (User)session.getAttribute("user");
 					<a href="IndexServlet"><img src="./images/logo_gakusapo_header.png" class="w-36"></a>
 				</div>
 				<div class="">
+					<% if(user != null) { %>
 					<ul class="flex pt-4">
 						<li>
 							<a href="RegisterMaterialServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
@@ -26,7 +27,7 @@ User user = (User)session.getAttribute("user");
 							</a>
 						</li>
 						<li>
-							<a href="MaterialLibraryServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
+							<a href="ViewMaterialsServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
 								教材一覧
 							</a>
 						</li>
@@ -36,11 +37,17 @@ User user = (User)session.getAttribute("user");
 							</a>
 						</li>
 						<li>
+							<a href="ViewRecordsServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
+								記録閲覧
+							</a>
+						</li>
+						<li>
 							<a href="SetGoalServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
 								目標登録
 							</a>
 						</li>
 					</ul>
+					<% } %>
 				</div>
 			</div>
 	    </nav>

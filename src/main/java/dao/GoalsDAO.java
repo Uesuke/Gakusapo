@@ -6,9 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.Goal;
+import model.User;
 
 public class GoalsDAO {
 
@@ -16,7 +19,7 @@ public class GoalsDAO {
 	private final String JDBC_URL = "jdbc:mysql://localhost:3306/shuPre?useSSL=false";
 	private final String DB_USER = "root";
 	private final String DB_PASS = "";
-	//教材登録処理
+	//目標登録処理
 	public Goal setGoal(Goal sg) {
 		Goal goal = null;
 	    String goalName = sg.getGoalName();
@@ -72,5 +75,73 @@ public class GoalsDAO {
 		}
 		return goal;
 	}
-	
+	public Goal findById(int goalId) {
+		Goal goal = null;
+		//JDBCドライバを読み込む
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		}catch(ClassNotFoundException e) {
+			throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+		}
+		//データベースに接続
+		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER,DB_PASS)) {
+			//SELECT文を準備
+			String sql = "SELECT * FROM Goals WHERE goalId = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, goalId);
+			
+			//SELECT文を実行し、結果表を取得
+			ResultSet rs = pStmt.executeQuery();
+			
+			if(rs.next()) {
+				String goalName = rs.getString("goalName");
+				int userId = rs.getInt("userId");
+				Date dateStart = rs.getDate("dateStart");
+				Date dateEnd = rs.getDate("dateEnd");
+				int standardTypeId = rs.getInt("standardTypeId");
+				int statusTypeId = rs.getInt("statusTypeId");
+				goal = new Goal(goalId, goalName, userId, dateStart, dateEnd, standardTypeId, statusTypeId);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return goal;
+	}
+	public List<Goal> findAllByUser(User user){
+		Goal goal = null;
+		List<Goal> goalList = new ArrayList<Goal>();
+		int userId = user.getUserId();
+		//JDBCドライバを読み込む
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		}catch(ClassNotFoundException e) {
+			throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+		}
+		//データベースに接続
+		try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER,DB_PASS)) {
+			//SELECT文を準備
+			String sql = "SELECT * FROM Goals WHERE userId = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, userId);
+			
+			//SELECT文を実行し、結果表を取得
+			ResultSet rs = pStmt.executeQuery();
+			
+			while(rs.next()) {
+				int goalId = rs.getInt("goalId");
+				String goalName = rs.getString("goalName");
+				Date dateStart = rs.getDate("dateStart");
+				Date dateEnd = rs.getDate("dateEnd");
+				int standardTypeId = rs.getInt("standardTypeId");
+				int statusTypeId = rs.getInt("statusTypeId");
+				goal = new Goal(goalId, goalName, userId, dateStart, dateEnd, standardTypeId, statusTypeId);
+				goalList.add(goal);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return goalList;
+	}
 }

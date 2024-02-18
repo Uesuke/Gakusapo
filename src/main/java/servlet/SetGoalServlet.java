@@ -23,7 +23,7 @@ import model.Material;
 import model.SetGoalDetailLogic;
 import model.SetGoalLogic;
 import model.User;
-import model.ViewMaterialLogic;
+import model.ViewMaterialsLogic;
 
 @WebServlet("/SetGoalServlet")
 public class SetGoalServlet extends HttpServlet {
@@ -40,7 +40,7 @@ public class SetGoalServlet extends HttpServlet {
 		}
 		else {	//ログイン済みの場合
 			//ユーザーに紐づいたMaterialをArrayListに取得
-			ViewMaterialLogic vml = new ViewMaterialLogic();
+			ViewMaterialsLogic vml = new ViewMaterialsLogic();
 			List<Material> materialList = vml.execute(user);
 			
 			//セッションスコープにリストを保存

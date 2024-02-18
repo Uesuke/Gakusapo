@@ -1,31 +1,52 @@
 package model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Progress implements Serializable {
     private int progressId;
     private int userId;
-    private int goalId;
     private int materialId;
     private Date date;
-    private int timeStart;
-    private int timeEnd;
-    private int pageStartAt;
-    private int pageEndAt;
+    private int time;	//取り組み時間を秒単位で扱う
+    private int pageStart;
+    private int pageEnd;
+    private boolean isShared;
 
-    public Progress(int progressId, int userId, int goalId,  int materialId, Date date, int timeStart, int timeEnd, int pageStartAt, int pageEndAt) {
+    public Progress(int progressId, int userId, int materialId, Date date, int time, int pageStart, int pageEnd, boolean isShared) {
         this.progressId = progressId;
         this.userId = userId;
-        this.goalId = goalId;
         this.materialId = materialId;
         this.date = date;
-        this.timeStart = timeStart;
-        this.timeEnd = timeEnd;
-        this.pageStartAt = pageStartAt;
-        this.pageEndAt = pageEndAt;
+        this.time = time;
+        this.pageStart = pageStart;
+        this.pageEnd = pageEnd;
+        this.isShared = isShared;
     }
-
+    
+    //時間、分のゲッターメソッド
+    public int getHour() {
+    	int hour = this.time / 60 / 60;
+    	return hour;
+    }
+    
+    public int getMunite() {
+    	int munite = (this.time % (60 * 60)) / 60;
+    	return munite;
+    }
+    
+    //日付をString型で出力するメソッド
+    public String getDateToString() {
+    	String strDate;
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+    	strDate = sdf.format(this.date);
+    	return strDate;
+  
+    }
+    
+    //プロパティのゲッターセッター
+    
     public int getProgressId() {
         return progressId;
     }
@@ -40,14 +61,6 @@ public class Progress implements Serializable {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public int getGoalId() {
-        return goalId;
-    }
-
-    public void setGoalId(int goalId) {
-        this.goalId = goalId;
     }
 
     public int getMaterialId() {
@@ -66,36 +79,35 @@ public class Progress implements Serializable {
         this.date = date;
     }
 
-    public int getTimeStart() {
-        return timeStart;
+    public int getTime() {
+        return time;
     }
 
-    public void setTimeStart(int timeStart) {
-        this.timeStart = timeStart;
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getPageStart() {
+        return pageStart;
+    }
+
+    public void setPageStart(int pageStart) {
+        this.pageStart = pageStart;
+    }
+
+    public int getPageEnd() {
+        return pageEnd;
+    }
+
+    public void setPageEnd(int pageEnd) {
+        this.pageEnd = pageEnd;
     }
     
-    public int getTimeEnd() {
-        return timeEnd;
+    public boolean getIsShared() {
+        return isShared;
     }
 
-    public void setTimeEnd(int timeEnd) {
-        this.timeEnd = timeEnd;
+    public void setIsShared(boolean isShared) {
+        this.isShared = isShared;
     }
-
-    public int getPageStartAt() {
-        return pageStartAt;
-    }
-
-    public void setPageStartAt(int pageStartAt) {
-        this.pageStartAt = pageStartAt;
-    }
-
-    public int getPageEndAt() {
-        return pageEndAt;
-    }
-
-    public void setPageEndAt(int pageEndAt) {
-        this.pageEndAt = pageEndAt;
-    }
-
 }
