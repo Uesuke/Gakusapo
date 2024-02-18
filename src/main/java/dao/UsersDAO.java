@@ -122,7 +122,7 @@ public class UsersDAO {
 			
 			if (rs.next()) {
 			    int numOfDupli = rs.getInt("num");
-			    if (numOfDupli != 0) {
+			    if (numOfDupli > 0) {
 			        hasDupli = true;
 			    }
 			}

@@ -5,7 +5,7 @@ import java.util.List;
 
 import dao.MaterialsDAO;
 
-public class ViewMaterialLogic {
+public class ViewMaterialsLogic {
 
 	public List<Material> execute(User user) {
 		List<Material> materialList = new ArrayList<>();

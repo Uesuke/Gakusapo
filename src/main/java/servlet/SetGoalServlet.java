@@ -23,7 +23,7 @@ import model.Material;
 import model.SetGoalDetailLogic;
 import model.SetGoalLogic;
 import model.User;
-import model.ViewMaterialLogic;
+import model.ViewMaterialsLogic;
 
 @WebServlet("/SetGoalServlet")
 public class SetGoalServlet extends HttpServlet {
@@ -40,7 +40,7 @@ public class SetGoalServlet extends HttpServlet {
 		}
 		else {	//ログイン済みの場合
 			//ユーザーに紐づいたMaterialをArrayListに取得
-			ViewMaterialLogic vml = new ViewMaterialLogic();
+			ViewMaterialsLogic vml = new ViewMaterialsLogic();
 			List<Material> materialList = vml.execute(user);
 			
 			//セッションスコープにリストを保存
@@ -59,12 +59,12 @@ public class SetGoalServlet extends HttpServlet {
 		
 	    try {
 	    	//目標基本情報登録
-	    	String goalName = request.getParameter("materialName");
+	    	String goalName = request.getParameter("goalName");
 			int userId = user.getUserId();
 			int statusTypeId = 1;	//進行中
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date dateStart = sdf.parse((String)request.getParameter("dateStart"));
-			Date dateEnd = sdf.parse((String)request.getParameter("dateEnd"));
+			Date dateStart = sdf.parse(request.getParameter("dateStart"));
+			Date dateEnd = sdf.parse(request.getParameter("dateEnd"));
 			int standardTypeId = Integer.parseInt(request.getParameter("standardTypeId"));
 			
 			//入力値をもとにDBに目標を登録

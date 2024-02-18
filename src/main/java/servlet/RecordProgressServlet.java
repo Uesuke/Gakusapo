@@ -14,9 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.MaterialsDAO;
 import model.Material;
+import model.Progress;
+import model.RecordProgressLogic;
 import model.User;
-import model.ViewMaterialLogic;
+import model.ViewMaterialsLogic;
 
 @WebServlet("/RecordProgressServlet")
 public class RecordProgressServlet extends HttpServlet {
@@ -34,7 +37,7 @@ public class RecordProgressServlet extends HttpServlet {
 		}
 		else {	//ログイン済みの場合
 			//ユーザーに紐づいたMaterialをArrayListに取得
-			ViewMaterialLogic vml = new ViewMaterialLogic();
+			ViewMaterialsLogic vml = new ViewMaterialsLogic();
 			List<Material> materialList = vml.execute(user);
 			
 			//セッションスコープにリストを保存
@@ -52,22 +55,41 @@ public class RecordProgressServlet extends HttpServlet {
 		
 		//リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8");
-		int userId = user.getUserId();
-	    int goalId = Integer.parseInt(request.getParameter("goalId"));
-	    int materialId = Integer.parseInt(request.getParameter("materialId"));
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
 	    try {
-			Date date = sdf.parse((String)request.getParameter("date"));
+	    	//スコープから進捗に関するプロパティを取得
+	    	int userId = user.getUserId();
+		    int materialId = Integer.parseInt(request.getParameter("materialId"));
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = sdf.parse(request.getParameter("date"));
+			int hour = Integer.parseInt(request.getParameter("hour"));
+			int munite = Integer.parseInt(request.getParameter("munite"));
+			int time = (hour * 60 * 60) + (munite * 60);
+		    int pageStart = Integer.parseInt(request.getParameter("pageStart"));
+		    int pageEnd = Integer.parseInt(request.getParameter("pageEnd"));
+		    int isSharedNumber = Integer.parseInt(request.getParameter("isShared"));
+		    boolean isShared = false;
+		    if(isSharedNumber == 1) {
+		    	isShared = true;
+		    }
+			
+			//進捗記録処理
+			Progress recordingProgress = new Progress(0, userId, materialId, date, time, pageStart, pageEnd, isShared);
+			RecordProgressLogic rpl = new RecordProgressLogic();
+			Progress progress = rpl.execute(recordingProgress);
+			
+			MaterialsDAO mDAO = new MaterialsDAO();
+			Material material = mDAO.findById(materialId);
+			
+			//進捗情報と教材情報をリクエストスコープに保存
+			request.setAttribute("progress", progress);
+			request.setAttribute("material", material);
+			
+			//登録完了画面にフォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/progress_record_completed.jsp");
+			dispatcher.forward(request, response);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	    int timeStart = Integer.parseInt(request.getParameter("timeStart"));
-	    int timeEnd = Integer.parseInt(request.getParameter("timeEnd"));
-	    int pageStartAt = Integer.parseInt(request.getParameter("pageStartAt"));
-	    int pageEndAt = Integer.parseInt(request.getParameter("pageEndAt"));;
-		
-		//進捗記録処理
-		
-		
 	}
 }

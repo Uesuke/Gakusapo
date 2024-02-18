@@ -4,13 +4,13 @@ import java.util.List;
 
 import model.Material;
 import model.User;
-import model.ViewMaterialLogic;
+import model.ViewMaterialsLogic;
 
 public class ViewMaterialLogicTest {
 
 	public static void main(String[] args) {
 		User user = new User(1, "uesuke", "上田信介", "1234", "mail@mail.com", 1);
-		ViewMaterialLogic vml = new ViewMaterialLogic();
+		ViewMaterialsLogic vml = new ViewMaterialsLogic();
 		List<Material> materialList = vml.execute(user);
 		
 		for(Material material: materialList) {
