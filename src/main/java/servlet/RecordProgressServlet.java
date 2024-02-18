@@ -19,7 +19,7 @@ import model.Material;
 import model.Progress;
 import model.RecordProgressLogic;
 import model.User;
-import model.ViewMaterialLogic;
+import model.ViewMaterialsLogic;
 
 @WebServlet("/RecordProgressServlet")
 public class RecordProgressServlet extends HttpServlet {
@@ -37,7 +37,7 @@ public class RecordProgressServlet extends HttpServlet {
 		}
 		else {	//ログイン済みの場合
 			//ユーザーに紐づいたMaterialをArrayListに取得
-			ViewMaterialLogic vml = new ViewMaterialLogic();
+			ViewMaterialsLogic vml = new ViewMaterialsLogic();
 			List<Material> materialList = vml.execute(user);
 			
 			//セッションスコープにリストを保存

@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Progress implements Serializable {
@@ -29,9 +30,19 @@ public class Progress implements Serializable {
     	int hour = this.time / 60 / 60;
     	return hour;
     }
+    
     public int getMunite() {
     	int munite = (this.time % (60 * 60)) / 60;
     	return munite;
+    }
+    
+    //日付をString型で出力するメソッド
+    public String getDateToString() {
+    	String strDate;
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+    	strDate = sdf.format(this.date);
+    	return strDate;
+  
     }
     
     //プロパティのゲッターセッター

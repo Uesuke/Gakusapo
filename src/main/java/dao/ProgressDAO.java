@@ -6,9 +6,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
+import model.Goal;
+import model.GoalDetail;
 import model.Progress;
+import model.User;
 
 public class ProgressDAO {
 	//データベース接続に使用する情報
@@ -79,5 +85,105 @@ public class ProgressDAO {
 				return null;
 			}
 			return progress;
+		}
+		public List<Progress> findAllByUser(User user){
+			Progress progress = null;
+			List<Progress> progressList = new ArrayList<Progress>();
+			int userId = user.getUserId();
+			//JDBCドライバを読み込む
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+			}catch(ClassNotFoundException e) {
+				throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+			}
+			//データベースに接続
+			try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER,DB_PASS)) {
+				//SELECT文を準備
+				String sql = "SELECT * FROM Progress WHERE userId = ? ORDER BY date DESC;";
+				PreparedStatement pStmt = conn.prepareStatement(sql);
+				pStmt.setInt(1, userId);
+				
+				//SELECT文を実行し、結果表を取得
+				ResultSet rs = pStmt.executeQuery();
+				
+				while(rs.next()) {
+					int progressId = rs.getInt("progressId");
+					int materialId = rs.getInt("materialId");
+					Date date = rs.getDate("date");
+					int time = rs.getInt("time");
+					int pageStart = rs.getInt("pageStart");
+					int pageEnd = rs.getInt("pageEnd");
+					int isSharedNum = rs.getInt("isShared");
+					boolean isShared = false;
+					if(isSharedNum == 1) {
+						isShared = true;
+					}
+					progress = new Progress(progressId, userId, materialId, date, time, pageStart, pageEnd, isShared);
+					progressList.add(progress);
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+			return progressList;
+		}
+		public Map<GoalDetail, List<Progress>> findAllByGoal(Goal goal, List<GoalDetail> goalDetailList){
+			Progress progress = null;
+			List<Progress> progressList = new ArrayList<Progress>();
+			int userId = goal.getUserId();
+			//JDBCドライバを読み込む
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+			}catch(ClassNotFoundException e) {
+				throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+			}
+			//データベースに接続
+			try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER,DB_PASS)) {
+				//SELECT文を準備
+				String sql = "SELECT * FROM Progress "
+							+ "WHERE "
+							+ "userId = ? "
+							+ "AND "
+							+ "date BETWEEN ? AND ? "
+							+ "AND "
+							+ "materialId in ( "
+							+ "SELECT materialId FROM GoalDetails WHERE goalId = ?"
+							+ ") "
+							+ "ORDER BY materialId, pageStart;"
+							;
+				PreparedStatement pStmt = conn.prepareStatement(sql);
+				pStmt.setInt(1, userId);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String strDate = sdf.format(goal.getDateStart());
+				java.sql.Date sqlDate = java.sql.Date.valueOf(strDate);
+				pStmt.setDate(2, sqlDate);
+				strDate = sdf.format(goal.getDateEnd());
+				sqlDate = java.sql.Date.valueOf(strDate);
+				pStmt.setDate(3, sqlDate);
+				pStmt.setInt(4, goal.getGoalId());
+				
+				//SELECT文を実行し、結果表を取得
+				ResultSet rs = pStmt.executeQuery();
+				
+				while(rs.next()) {
+					int progressId = rs.getInt("progressId");
+					int materialId = rs.getInt("materialId");
+					Date date = rs.getDate("date");
+					int time = rs.getInt("time");
+					int pageStart = rs.getInt("pageStart");
+					int pageEnd = rs.getInt("pageEnd");
+					int isSharedNum = rs.getInt("isShared");
+					boolean isShared = false;
+					if(isSharedNum == 1) {
+						isShared = true;
+					}
+					progress = new Progress(progressId, userId, materialId, date, time, pageStart, pageEnd, isShared);
+					progressList.add(progress);
+				}
+			}catch(SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+			return progressList;
 		}
 }

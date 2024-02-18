@@ -13,10 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import model.Material;
 import model.User;
-import model.ViewMaterialLogic;
+import model.ViewMaterialsLogic;
 
-@WebServlet("/MaterialLibraryServlet")
-public class MaterialLibraryServlet extends HttpServlet {
+@WebServlet("/ViewMaterialsServlet")
+public class ViewMaterialsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,13 +31,13 @@ public class MaterialLibraryServlet extends HttpServlet {
 		}
 		else {	//ログイン済みの場合
 			//ユーザーに紐づいたMaterialをArrayListに取得
-			ViewMaterialLogic vml = new ViewMaterialLogic();
+			ViewMaterialsLogic vml = new ViewMaterialsLogic();
 			List<Material> materialList = vml.execute(user);
 			
 			//セッションスコープにリストを保存
 			session.setAttribute("materialList", materialList);
 			//フォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/library_material.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/materials.jsp");
 			dispatcher.forward(request, response);
 		}
 	}

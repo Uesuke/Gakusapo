@@ -31,7 +31,7 @@ User user = (User)session.getAttribute("user");
 								</a>
 							</li>
 							<li>
-								<a href="MaterialLibraryServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
+								<a href="ViewMaterialsServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
 									教材一覧
 								</a>
 							</li>
