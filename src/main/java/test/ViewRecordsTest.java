@@ -2,6 +2,7 @@ package test;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import dao.GoalDetailsDAO;
 import dao.GoalsDAO;
@@ -35,20 +36,23 @@ public class ViewRecordsTest {
 			System.out.println(gd.getGoalId() + ": " + gd.getMaterialId());
 		}
 		
-		List<Progress> progressList = pDAO.findAllByGoal(goal);
-		for(Progress p : progressList) {
-			System.out.println("ID: " + p.getProgressId());
-			System.out.println("userId: " + p.getUserId());
-			System.out.println("materialId: " + p.getMaterialId());
-			System.out.println("pageStart: " + p.getPageStart());
-			System.out.println("pageEnd: " + p.getPageEnd());
-			System.out.println("time: " + p.getTime());
-			System.out.println("shared: " + p.getIsShared());
-			String date = sdf.format(p.getDate());
-			System.out.println("date:" + date);
-			System.out.println("-------------");
+		Map<GoalDetail, List<Progress>> map = pDAO.findAllByGoalAndDetails(goal, goalDetailsList);
+		for(GoalDetail goalDetail : goalDetailsList) {
+			List<Progress> progressList = map.get(goalDetail);
+			System.out.println("GoalDetailId: " + goalDetail.getGoalId());
+			for(Progress p : progressList) {
+				System.out.println("ID: " + p.getProgressId());
+				System.out.println("userId: " + p.getUserId());
+				System.out.println("materialId: " + p.getMaterialId());
+				System.out.println("pageStart: " + p.getPageStart());
+				System.out.println("pageEnd: " + p.getPageEnd());
+				System.out.println("time: " + p.getTime());
+				System.out.println("shared: " + p.getIsShared());
+				String date = sdf.format(p.getDate());
+				System.out.println("date:" + date);
+				System.out.println("-------------");
+			}
 		}
-		System.out.println(progressList.isEmpty());
 	}
 
 }

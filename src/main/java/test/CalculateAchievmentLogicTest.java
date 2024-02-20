@@ -1,15 +1,37 @@
-package model;
+package test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import dao.GoalDetailsDAO;
+import dao.GoalsDAO;
 import dao.ProgressDAO;
+import dao.UsersDAO;
+import model.CalculateAchievementLogic;
+import model.Goal;
+import model.GoalDetail;
+import model.LoginUser;
+import model.Progress;
+import model.User;
 
-public class CalculateAchievementLogic {
-	public Map<GoalDetail, Integer> calculateDoneValueByGoal(Goal goal) {
+public class CalculateAchievmentLogicTest {
+
+	public static void main(String[] args) {
+		
+		CalculateAchievementLogic cal = new CalculateAchievementLogic();
+		
+		LoginUser loginUser = new LoginUser("sample", "");
+		UsersDAO uDAO = new UsersDAO();
+		User user = uDAO.findByLogin(loginUser);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		
+		GoalsDAO gDAO = new GoalsDAO();
+		
+		Goal goal = gDAO.findById(2);
+				
 		GoalDetailsDAO gdDAO = new GoalDetailsDAO();
 		List<GoalDetail> goalDetailsList = gdDAO.findAllByGoal(goal);
 		
@@ -66,8 +88,12 @@ public class CalculateAchievementLogic {
 						break;
 					}
 				}
+				System.out.println("ID: " + goalDetail.getMaterialId());
+				
+				
 				Integer sumOfDonePages = 0;
-				for(int i=0; i<idx; i++) {
+				for(int i=0; i<pageEndList.size(); i++) {
+					System.out.println(pageEndList.get(i) + "-" + pageStartList.get(i) + "+1");
 					int pages = pageEndList.get(i) - pageStartList.get(i) + 1;
 					sumOfDonePages += pages;
 				}
@@ -84,6 +110,13 @@ public class CalculateAchievementLogic {
 				resultMap.put(goalDetail, sumTime);
 			}
 		}
-		return resultMap;
+		for(GoalDetail goalDetail : goalDetailsList) {
+			System.out.println("materialID: " + goalDetail.getMaterialId());
+			int num = resultMap.get(goalDetail);
+			System.out.println(num);
+		}
+		
 	}
+	
+
 }
