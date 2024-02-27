@@ -35,11 +35,11 @@ public class RegisterMaterialServlet extends HttpServlet {
 		int pageStart = Integer.parseInt(request.getParameter("pageStart"));
 		int pageEnd = Integer.parseInt(request.getParameter("pageEnd"));
 		int sectionStart = 0;
-		if(request.getParameter("pageStart").equals("") && request.getParameter("sectionStart") != null) {
+		if(!request.getParameter("sectionStart").equals("") && request.getParameter("sectionStart") != null) {
 			sectionStart = Integer.parseInt(request.getParameter("sectionStart"));
 		}
 		int sectionEnd = 0;
-		if(request.getParameter("pageEnd").equals("") && request.getParameter("sectionEnd") != null) {
+		if(!request.getParameter("sectionEnd").equals("") && request.getParameter("sectionEnd") != null) {
 			sectionEnd = Integer.parseInt(request.getParameter("sectionEnd"));
 		}
 		int userId = user.getUserId();
