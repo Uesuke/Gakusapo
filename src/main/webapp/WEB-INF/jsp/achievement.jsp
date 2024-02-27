@@ -84,7 +84,7 @@ Map<Integer, Integer> mapOfGoalDetailsAndAchievmentRatio = (Map<Integer, Integer
 								var ctx = document.getElementById('achievement_chart');
 								var sum = 0;
 								<%for(GoalDetail goalDetail: goalDetails){%> sum += <%= mapOfGoalDetailsAndAchievmentRatio.get(goalDetail.getMaterialId()) %>;<%}%>
-								var achievement_ratio = sum/3;
+								var achievement_ratio = sum/<%if(goalDetails.size()!=0){%><%= goalDetails.size() %><%}%><%else{%><%=1%><%}%>;
 								var data = {
 									labels: ["達成", "残り"],
 									datasets: [{
