@@ -26,10 +26,12 @@ List<Material> materialList = (List<Material>)session.getAttribute("materialList
 								<% for(Material material : materialList){ %>
 									<li class="w-[200px] px-2 py-4 mx-5 my-6 border border-gray-300 rounded text-center shadow">
 										<h2 class="font-bold"><%= material.getMaterialName() %></h2>
-										<p>全<%= material.getTotalPages() %>ページ</p>
-										<p>全<%= material.getTotalSections() %>単位</p>
+										<p><%= material.getTotalPages() %>ページ</p>
+										<%if(material.getSectionStart() != 0 && material.getSectionEnd() != 0) { %>
+										<p><%= material.getTotalSections() %>単位</p>
+										<% } %>
 										<p>総取り組み時間</p>
-										<p>2時間10分</p>
+										<p>HH時間mm分</p>
 									</li>
 								<% } %>
 							</ul>

@@ -8,7 +8,6 @@ import java.util.Map;
 import dao.GoalDetailsDAO;
 import dao.GoalsDAO;
 import dao.ProgressDAO;
-import model.CalculateAchievementLogic;
 import model.Goal;
 import model.GoalDetail;
 import model.Progress;
@@ -16,8 +15,6 @@ import model.Progress;
 public class CalculateAchievmentLogicTest {
 
 	public static void main(String[] args) {
-		
-		CalculateAchievementLogic cal = new CalculateAchievementLogic();
 		
 		GoalsDAO gDAO = new GoalsDAO();
 		
