@@ -19,16 +19,16 @@
 					<h1 class="text-3xl text-center mb-8">ユーザー登録確認画面</h1>
 					<div class="bg-white p-8 rounded shadow-lg">
 						<div class="p-4 mb-4">
-							<p>以下の登録内容に誤りがないか確認してください</p>
-							<p>ユーザーID：<br>
+							<p class="mb-2">以下の登録内容に誤りがないか確認してください</p>
+							<p class="mb-2">ユーザーID：
 							<%=signupUser.getAccountId() %></p>
-							<p>名前：<br>
+							<p class="mb-2">名前：
 							<%=signupUser.getName() %></p>
-							<p>パスワード：<br>
+							<p class="mb-2">パスワード：
 							<%=signupUser.getPass() %></p>
-							<p>メールアドレス：<br>
+							<p class="mb-2">メールアドレス：
 							<%=signupUser.getMail() %></p>
-							<p>ユーザータイプ：<br>
+							<p class="mb-2">ユーザータイプ：
 							<%if(signupUser.getUserTypeId() == 1){ %>
 								個人・学生モード
 							<% } else if(signupUser.getUserTypeId() == 2) { %>
@@ -37,12 +37,14 @@
 								<span class="text-danger">ユーザータイプの取得に失敗しました</span>
 							<% } %>
 							</p>
-							<form action="CompleteSignupServlet" method="post">
-								<button type="submit" class="btn btn-primary">確認して登録</button>
-							</form>
-							<form action="SignupServlet" method="get">
-								<button class="btn btn-secondary mt-3">登録内容を修正</button>
-							</form>
+							<div class="flex mt-4">
+								<form action="CompleteSignupServlet" method="post">
+									<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">確認して登録</button>
+								</form>
+								<form action="SignupServlet" method="get" class="ml-4">
+									<button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">登録内容を修正</button>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>

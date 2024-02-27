@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -127,9 +128,13 @@ public class ProgressDAO {
 			}
 			return progressList;
 		}
-		public Map<GoalDetail, List<Progress>> findAllByGoal(Goal goal, List<GoalDetail> goalDetailList){
+		public Map<GoalDetail, List<Progress>> findAllByGoalAndDetails(Goal goal, List<GoalDetail> goalDetailsList){
 			Progress progress = null;
-			List<Progress> progressList = new ArrayList<Progress>();
+			Map<GoalDetail, List<Progress>> map = new HashMap<GoalDetail, List<Progress>>();
+			for(GoalDetail detail : goalDetailsList) {
+				List<Progress> pList = new ArrayList<Progress>();
+				map.put(detail, pList);
+			}
 			int userId = goal.getUserId();
 			//JDBCドライバを読み込む
 			try {
@@ -140,16 +145,16 @@ public class ProgressDAO {
 			//データベースに接続
 			try(Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER,DB_PASS)) {
 				//SELECT文を準備
-				String sql = "SELECT * FROM Progress "
+				String sql = "SELECT * FROM Progress "	//進捗表から
 							+ "WHERE "
-							+ "userId = ? "
+							+ "userId = ? "	//同一ユーザーの
 							+ "AND "
-							+ "date BETWEEN ? AND ? "
+							+ "date BETWEEN ? AND ? "	//目標の区間に収まる日付をもち
 							+ "AND "
-							+ "materialId in ( "
+							+ "materialId in ( "	//目標詳細に紐づけされたMaterialを実施している進捗を抜き出し、
 							+ "SELECT materialId FROM GoalDetails WHERE goalId = ?"
 							+ ") "
-							+ "ORDER BY materialId, pageStart;"
+							+ "ORDER BY materialId, pageStart;"		//MaterialIDと開始ページについて昇順に並べる
 							;
 				PreparedStatement pStmt = conn.prepareStatement(sql);
 				pStmt.setInt(1, userId);
@@ -178,12 +183,21 @@ public class ProgressDAO {
 						isShared = true;
 					}
 					progress = new Progress(progressId, userId, materialId, date, time, pageStart, pageEnd, isShared);
-					progressList.add(progress);
+					
+					for(GoalDetail detail : goalDetailsList) {
+						if(detail.getMaterialId() == materialId //MaterialIDが一致し
+								&& detail.getStartFrom() <= progress.getPageEnd()
+								&& progress.getPageStart() <= detail.getEndTo()) {	//目標の範囲と被りがある進捗のみを
+							List<Progress> pList = map.get(detail);		//リストとマップに保存
+							pList.add(progress);
+							map.put(detail, pList);
+						}
+					}
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
 				return null;
 			}
-			return progressList;
+			return map;
 		}
 }

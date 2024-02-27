@@ -34,8 +34,14 @@ public class RegisterMaterialServlet extends HttpServlet {
 		String materialName = request.getParameter("materialName");
 		int pageStart = Integer.parseInt(request.getParameter("pageStart"));
 		int pageEnd = Integer.parseInt(request.getParameter("pageEnd"));
-		int sectionStart = Integer.parseInt(request.getParameter("sectionStart"));
-		int sectionEnd = Integer.parseInt(request.getParameter("sectionEnd"));
+		int sectionStart = 0;
+		if(request.getParameter("pageStart").equals("") && request.getParameter("sectionStart") != null) {
+			sectionStart = Integer.parseInt(request.getParameter("sectionStart"));
+		}
+		int sectionEnd = 0;
+		if(request.getParameter("pageEnd").equals("") && request.getParameter("sectionEnd") != null) {
+			sectionEnd = Integer.parseInt(request.getParameter("sectionEnd"));
+		}
 		int userId = user.getUserId();
 		
 		//教材登録処理
