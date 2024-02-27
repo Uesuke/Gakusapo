@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="model.User" %>
+<%@ page import="model.User, model.Progress, model.Material, java.util.List, java.util.Map" %>
 <%
 //セッションスコープに保存されたユーザー情報を取得
 User user = (User)session.getAttribute("user");
+
+//セッションスコープに保存されたProgressリストを取得
+List<Progress> progressList = (List<Progress>)session.getAttribute("progressList");
+Map<Progress, Material> map = (Map<Progress, Material>)session.getAttribute("MapOfProgressAndMaterial");
 %>
 <!DOCTYPE html>
 <html>
@@ -15,45 +19,33 @@ User user = (User)session.getAttribute("user");
 
 	<body class="bg-gray-100">
 		<jsp:include page="../../header.jsp"/>
-		<div class="container mx-auto mt-5">
+		<div class="container w-[1024px] mx-auto mt-5">
 			<div class="flex justify-center">
-				<div class="w-full max-w-lg">
+				<div class="w-full">
 					<h1 class="text-3xl text-center mb-8">ホーム画面</h1>
 					<div class="bg-white p-8 rounded shadow-lg">
-						<h2>Profile</h2>
-						<p>お名前：<%= user.getName() %>さん</p>
-						<p>アカウントID:<%= user.getAccountId() %></p>
-						<h2>Link</h2>
-						<ul>
-							<li>
-								<a href="RegisterMaterialServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
-									教材登録
-								</a>
-							</li>
-							<li>
-								<a href="ViewMaterialsServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
-									教材一覧
-								</a>
-							</li>
-							<li>
-								<a href="RecordProgressServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
-									進捗記録
-								</a>
-							</li>
-							<li>
-								<a href="SetGoalServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
-									目標登録
-								</a>
-							</li>
-						</ul>
-					    <h2>Records</h2>
-						<ul>
-							<li>
-								「教材名」<br>
-								取り組み時間：2h30min
-								取り組み範囲：200～213p
-					        </li>
-					    </ul>
+						<div class="w-[612px] mx-auto">
+							<h2 class="text-2xl mb-1">Profile</h2>
+							<p>お名前：<%= user.getName() %>さん</p>
+							<p>アカウントID:<%= user.getAccountId() %></p>
+					    </div>
+					    <div class="w-[612px] mx-auto mt-5">
+					    	<h2 class="text-2xl">Records</h2>
+							<ul class="bg-gray-50 w-[612px] h-[612px] mx-auto overflow-y-scroll border border-gray-300 shadow">
+								<% for(Progress progress : progressList){ %>
+									<li class="container flex justify-between bg-white border-b p-2">
+										<div class="">
+											<h2 class="font-medium mb-1"><%= map.get(progress).getMaterialName() %></h2>
+											<p class="mb-1 ml-2">時間：<%= progress.getHour() %>時間<%= progress.getMunite() %>分</p>
+											<p class="mb-1 ml-2">範囲：<%= progress.getPageStart() %>～<%= progress.getPageEnd() %>ページ（計<%= progress.getPageEnd() - progress.getPageStart() %>ページ）</p>
+										</div>
+										<div class="text-sm">
+											<p><%= progress.getDateToString() %></p>
+										</div>
+									</li>
+								<% } %>
+							</ul>
+						</div>
 					</div>
 	            </div>
 	        </div>

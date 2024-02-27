@@ -1,5 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="
+	model.User,
+	model.Material,
+	model.Goal,
+	model.GoalDetail,
+	java.util.List,
+	java.util.Map
+" %>
+<%
+//セッションスコープに保存されたユーザー情報を取得
+User user = (User)session.getAttribute("user");
+//セッションスコープに保存されたGoalを取得
+Goal checkGoal = (Goal)session.getAttribute("checkGoal");
+//セッションスコープに保存されたGoalDetailsリストを取得
+List<GoalDetail> goalDetails = (List<GoalDetail>)session.getAttribute("goalDetails");
+//セッションスコープに保存されたマップを取得
+Map<GoalDetail, Material> mapOfGoalDetailsAndMaterial = (Map<GoalDetail, Material>)session.getAttribute("mapOfGoalDetailsAndMaterial");
+Map<Integer, Integer> mapOfGoalDetailsAndAchievmentRatio = (Map<Integer, Integer>)session.getAttribute("mapOfGoalDetailsAndAchievmentRatio");
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -15,32 +34,32 @@
 				<div class="w-full max-w-5xl">
 					<div class="bg-white p-8 rounded shadow-lg">
 						<div id="content" class="m-auto">
-							<h1 class="text-xl text-center">○○試験合格！</h1>
+							<h1 class="text-xl text-center">${ checkGoal.goalName }</h1>
 							<div class="flex justify-center mt-5">
 								<canvas id="achievement_chart" style="max-width: 480px; max-height: 240px;"></canvas>
 								<div class="flex flex-col justify-around">
 									<div class="text-center bg-blue-100 rounded p-4">
-										<p>取り組み期間</p>
-										<p>2024/2/24まで</p>
+										<p>目標日</p>
+										<p><%= checkGoal.getDateEndToString() %></p>
 									</div>
 									<div class="text-center bg-orange-100 rounded p-4">
-										<p>目標の日まで</p>
-										<p>あと12日！</p>
+										<p>目標日まで</p>
+										<p>あと<%= checkGoal.getRemainingDays() %>日！</p>
 									</div>
 								</div>
 							</div>
 							<div class="flex justify-center mt-5">
-								<canvas id="material_chart" style="max-width: 480px; max-height: 240px;"></canvas>
+								<canvas id="material_chart" style="max-width: 480px; max-height: <%= 80 * goalDetails.size()%>px;"></canvas>
 							</div>
 
 							<script>
 								var ctx = document.getElementById('material_chart');
 
 								var data = {
-									labels: ["教材１", "教材２", "教材３"],
+									labels: [<%for(GoalDetail goalDetail: goalDetails){%>"<%= mapOfGoalDetailsAndMaterial.get(goalDetail).getMaterialName() %>",<%}%>],
 									datasets: [{
 										label: '達成度',
-										data: [25, 68, 46],
+										data: [<%for(GoalDetail goalDetail: goalDetails){%>"<%= mapOfGoalDetailsAndAchievmentRatio.get(goalDetail.getMaterialId()) %>",<%}%>],
 										backgroundColor: 'rgba(100, 230, 150, 1)'
 									}]
 								};
@@ -63,7 +82,9 @@
 								});
 
 								var ctx = document.getElementById('achievement_chart');
-								var achievement_ratio = (25 + 68 + 46)/3;
+								var sum = 0;
+								<%for(GoalDetail goalDetail: goalDetails){%> sum += <%= mapOfGoalDetailsAndAchievmentRatio.get(goalDetail.getMaterialId()) %>;<%}%>
+								var achievement_ratio = sum/3;
 								var data = {
 									labels: ["達成", "残り"],
 									datasets: [{

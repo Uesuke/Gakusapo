@@ -9,17 +9,18 @@ import dao.GoalDetailsDAO;
 import dao.ProgressDAO;
 
 public class CalculateAchievementLogic {
-	public Map<GoalDetail, Integer> calculateDoneValueByGoal(Goal goal) {
+	public Map<Integer, Integer> calculateDoneValueByGoal(Goal goal) {
 		GoalDetailsDAO gdDAO = new GoalDetailsDAO();
 		List<GoalDetail> goalDetailsList = gdDAO.findAllByGoal(goal);
 		
 		ProgressDAO pDAO = new ProgressDAO();
 		Map<GoalDetail, List<Progress>> inputMap =
 				pDAO.findAllByGoalAndDetails(goal, goalDetailsList);
-		Map<GoalDetail, Integer> resultMap = new HashMap<GoalDetail, Integer>();
+		Map<Integer, Integer> resultMap = new HashMap<Integer, Integer>();
 		
 		if(goal.getStandardTypeId() == 1) {	//取り組みページ数で評価する場合
 			for(GoalDetail goalDetail : goalDetailsList) {
+				//実行済みの開始ページと終了ページをそれぞれリスト化し、実行済み範囲を表す
 				List<Integer> pageStartList = new ArrayList<Integer>();
 				List<Integer> pageEndList = new ArrayList<Integer>();
 				int min = goalDetail.getStartFrom();
@@ -67,11 +68,11 @@ public class CalculateAchievementLogic {
 					}
 				}
 				Integer sumOfDonePages = 0;
-				for(int i=0; i<idx; i++) {
+				for(int i=0; i<pageEndList.size(); i++) {
 					int pages = pageEndList.get(i) - pageStartList.get(i) + 1;
 					sumOfDonePages += pages;
 				}
-				resultMap.put(goalDetail, sumOfDonePages);
+				resultMap.put(goalDetail.getMaterialId(), sumOfDonePages);
 			}
 		}
 		else if(goal.getStandardTypeId() == 2) {	//取り組み時間で評価する場合
@@ -81,7 +82,7 @@ public class CalculateAchievementLogic {
 				for(Progress progress : progressList) {
 					sumTime += progress.getTime();
 				}
-				resultMap.put(goalDetail, sumTime);
+				resultMap.put(goalDetail.getMaterialId(), sumTime);
 			}
 		}
 		return resultMap;

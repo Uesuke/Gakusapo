@@ -46,6 +46,11 @@ User user = (User)session.getAttribute("user");
 								目標登録
 							</a>
 						</li>
+						<li>
+							<a href="ViewGoalsServlet" class="ml-2 bg-gradient-to-br from-green-300 to-green-800 hover:bg-gradient-to-tl text-white rounded px-4 py-2">
+								目標一覧
+							</a>
+						</li>
 					</ul>
 					<% } %>
 				</div>

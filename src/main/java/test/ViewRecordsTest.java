@@ -7,19 +7,16 @@ import java.util.Map;
 import dao.GoalDetailsDAO;
 import dao.GoalsDAO;
 import dao.ProgressDAO;
-import dao.UsersDAO;
 import model.Goal;
 import model.GoalDetail;
-import model.LoginUser;
 import model.Progress;
-import model.User;
 
 public class ViewRecordsTest {
 
 	public static void main(String[] args) {
-		LoginUser loginUser = new LoginUser("sample", "");
-		UsersDAO uDAO = new UsersDAO();
-		User user = uDAO.findByLogin(loginUser);
+//		LoginUser loginUser = new LoginUser("sample", "");
+//		UsersDAO uDAO = new UsersDAO();
+//		User user = uDAO.findByLogin(loginUser);
 		ProgressDAO pDAO = new ProgressDAO();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		
