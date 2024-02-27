@@ -1,4 +1,4 @@
-package model;
+package test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,21 +6,34 @@ import java.util.List;
 import java.util.Map;
 
 import dao.GoalDetailsDAO;
+import dao.GoalsDAO;
 import dao.ProgressDAO;
+import model.Goal;
+import model.GoalDetail;
+import model.Progress;
 
-public class CalculateAchievementLogic {
-	public Map<Integer, Integer> calculateDoneValueByGoal(Goal goal) {
+public class CalculateAchievmentLogicTest {
+
+	public static void main(String[] args) {
+		
+		GoalsDAO gDAO = new GoalsDAO();
+		
+		Goal goal = gDAO.findById(7);
+		
+//		Map<GoalDetail, Integer> resultMap = cal.calculateDoneValueByGoal(goal);
+		
+	
 		GoalDetailsDAO gdDAO = new GoalDetailsDAO();
 		List<GoalDetail> goalDetailsList = gdDAO.findAllByGoal(goal);
+		
 		
 		ProgressDAO pDAO = new ProgressDAO();
 		Map<GoalDetail, List<Progress>> inputMap =
 				pDAO.findAllByGoalAndDetails(goal, goalDetailsList);
-		Map<Integer, Integer> resultMap = new HashMap<Integer, Integer>();
+		Map<GoalDetail, Integer> resultMap = new HashMap<GoalDetail, Integer>();
 		
 		if(goal.getStandardTypeId() == 1) {	//取り組みページ数で評価する場合
 			for(GoalDetail goalDetail : goalDetailsList) {
-				//実行済みの開始ページと終了ページをそれぞれリスト化し、実行済み範囲を表す
 				List<Integer> pageStartList = new ArrayList<Integer>();
 				List<Integer> pageEndList = new ArrayList<Integer>();
 				int min = goalDetail.getStartFrom();
@@ -67,12 +80,15 @@ public class CalculateAchievementLogic {
 						break;
 					}
 				}
+				System.out.println("ID: " + goalDetail.getMaterialId());
+				
 				Integer sumOfDonePages = 0;
 				for(int i=0; i<pageEndList.size(); i++) {
+					System.out.println(pageEndList.get(i) + "-" + pageStartList.get(i) + "+1");
 					int pages = pageEndList.get(i) - pageStartList.get(i) + 1;
 					sumOfDonePages += pages;
 				}
-				resultMap.put(goalDetail.getMaterialId(), sumOfDonePages);
+				resultMap.put(goalDetail, sumOfDonePages);
 			}
 		}
 		else if(goal.getStandardTypeId() == 2) {	//取り組み時間で評価する場合
@@ -82,9 +98,16 @@ public class CalculateAchievementLogic {
 				for(Progress progress : progressList) {
 					sumTime += progress.getTime();
 				}
-				resultMap.put(goalDetail.getMaterialId(), sumTime);
+				resultMap.put(goalDetail, sumTime);
 			}
 		}
-		return resultMap;
+		
+		for(GoalDetail goalDetail : goalDetailsList) {
+			System.out.println("materialID: " + goalDetail.getMaterialId());
+			int num = resultMap.get(goalDetail);
+			System.out.println(num);
+		}
+	
 	}
+
 }

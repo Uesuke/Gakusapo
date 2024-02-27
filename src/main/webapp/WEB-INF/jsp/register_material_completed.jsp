@@ -5,31 +5,34 @@
 //セッションスコープに保存されたユーザー情報を取得
 User user = (User)session.getAttribute("user");
 //セッションスコープに保存されたmaterialを取得
-Material lastMaterial = (Material)session.getAttribute("material");
+Material material = (Material)session.getAttribute("material");
 %>
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<title>Material_Registeration|GAKUSAPO</title>
-	<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-	<jsp:include page="../../header.jsp"/>
-	<div class="container mx-auto mt-5">
-		<div class="flex justify-center">
-			<h2><%= lastMaterial.getMaterialName() %></h2>
-			<p><%= lastMaterial.getPageStart() %>～<%= lastMaterial.getPageEnd() %>ページ</p>
-			<p>総ページ数：<%= lastMaterial.getTotalPages() %></p>
-			<p><%= lastMaterial.getSectionStart() %>～<%= lastMaterial.getSectionEnd() %>セクション</p>
-			<p>総セクション数：<%= lastMaterial.getTotalSections() %></p>
+	<head>
+		<meta charset="UTF-8">
+		<title>Progress_Record|GAKUSAPO</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+	</head>
+	<body class="bg-gray-100">
+		<jsp:include page="../../header.jsp"/>
+		<div class="container mx-auto mt-5">
+			<div class="flex justify-center">
+				<div class="w-full max-w-5xl">
+					<div class="bg-white p-8 rounded shadow-lg">
+						<div id="content" class="w-4/5 m-auto">
+							<div class="w-2/3 text-center border border-gray-400 rounded p-4 mx-auto">
+								<p class="text-xl mt-2 mb-4">${ material.materialName }</p>
+								<p>ページ数</p>
+								<p class="mb-2">${ material.pageStart }～${ material.pageEnd }ページ</p>
+								<p>単位数</p>
+								<p class="mb-2">${ material.sectionStart }～${ material.sectionEnd }単位</p>
+							</div>
+							<p class="text-xl text-center mt-4 mb-2">登録完了！</p>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-	<p>教材の登録が完了しました</p>
-	<ul>
-		<li><a href="RegisterMaterialServlet">教材登録</a></li>
-		<li><a href="MaterialLibraryServlet">教材一覧</a></li>
-		<li><a href="RecordProgressServlet">進捗記録</a></li>
-	</ul>
-</body>
+	</body>
 </html>
